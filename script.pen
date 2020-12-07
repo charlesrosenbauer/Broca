@@ -1,8 +1,10 @@
 
 @entrance
 
-"Hello World!"
-  * "Goodbye"   -> @end
-  * "Okay then" -> @end
+# This is a comment line
+
+Hello World!
+  * Goodbye   -> @end
+  * Okay then -> @end
 
 @end
