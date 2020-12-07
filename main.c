@@ -12,7 +12,7 @@
 void loadFile(char* fname, char** buffer, int* fsize){
   FILE*  pFile = fopen (fname,"r");
   size_t result;
-  if (pFile == NULL){ printf("Cannot locate exec file."); exit(1); }
+  if (pFile == NULL){ printf("Cannot locate script file."); exit(1); }
   fseek (pFile , 0 , SEEK_END);
   *fsize = ftell (pFile);
   rewind (pFile);
@@ -35,9 +35,12 @@ int main(){
 	loadFile("script.pen", &text, &fsize);
 	
 	int  linect;
-	Str* lines = getLines(text, &linect);
+	Str* lines  = getLines(text, &linect);
+	Token** tks = malloc(sizeof(Token*) * linect);
+	int*  tcts  = malloc(sizeof(int)    * linect);
 	
 	for(int i = 0; i < linect; i++){
-		printf("LINE %i. SIZE: %lu. LEN: %i. IND: %i. : \"%s\"\n", i, strlen(lines[i].str), lines[i].len, indentation(lines[i]), lines[i].str);
+		tks[i] = lineTokens(lines[i], &tcts[i]);
+		for(int j = 0; j < tcts[i]; j++) printf("%i | TK: %i, X: %lu, STR: %s\n", i+1, tks[i][j].type, tks[i][j].hash, tks[i][j].word);
 	}
 }
