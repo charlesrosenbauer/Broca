@@ -18,19 +18,19 @@ typedef struct{
 
 
 typedef enum{
-	T_WORD    =  0,
-	T_OPEN    =  1,
-	T_CLOSE   =  2,
-	T_PERCENT =  3,
-	T_STRVAR  =  4,
-	T_OPTION  =  5,
-	T_INDENT  =  6,
-	T_ARROW   =  7,
-	T_GOTO    =  8,
-	T_TAG     =  9,
-	T_OR      = 10,
-	T_END     = 11,
-	T_ERROR   = 12
+	T_WORD     =  0,
+	T_OPEN     =  1,
+	T_CLOSE    =  2,
+	T_FUNCTION =  3,
+	T_PERCENT  =  4,
+	T_STRVAR   =  5,
+	T_OPTION   =  6,
+	T_INDENT   =  7,
+	T_ARROW    =  8,
+	T_TAG      =  9,
+	T_OR       = 10,
+	T_END      = 11,
+	T_ERROR    = 12
 }TokenType;
 
 typedef struct{

@@ -104,23 +104,66 @@ Token* lineTokens(Str text, int* tksct){
 			ret[tkct] = (Token){"|", 0, T_OR    }; tkct++;
 		}else if (c == '*'){
 			ret[tkct] = (Token){"*", 0, T_OPTION}; tkct++;
+		}else if (c == '_'){
+			// parse function
+			int len = 0;
+			for(int j = i+1; j < text.len; j++){
+				char v = text.str[j];
+				if(!isAlphaNum(v)){ j = text.len; len--; }
+				len++;
+			}
+			char* id = malloc(sizeof(char) * (len+2));
+			id[0]    = '_';
+			for(int j = 0; j < (len+1); j++)	id[j] = text.str[j+i];
+			id[len+1]  = '\0';
+			ret[tkct] = (Token){id, hashStr(id), T_FUNCTION}; tkct++;
+			i += len;
+		}else if (c == '$'){
 		}else if (c == '@'){
 			// parse tag
 			int len = 0;
 			for(int j = i+1; j < text.len; j++){
 				char v = text.str[j];
-				if(!isAlphaNum(v)) j = text.len;
+				if(!isAlphaNum(v)){ j = text.len; len--; }
 				len++;
 			}
 			char* id = malloc(sizeof(char) * (len+2));
 			id[0]    = '@';
 			for(int j = 0; j < (len+1); j++)	id[j] = text.str[j+i];
 			id[len+1]  = '\0';
-			ret[tkct] = (Token){id, hashStr(id), T_GOTO}; tkct++;
+			ret[tkct] = (Token){id, hashStr(id), T_TAG}; tkct++;
 			i += len;
-		}else if(c == '#'){
+		}else if (c == '$'){
+			// parse var
+			int len = 0;
+			for(int j = i+1; j < text.len; j++){
+				char v = text.str[j];
+				if(!isAlphaNum(v)){ j = text.len; len--; }
+				len++;
+			}
+			char* id = malloc(sizeof(char) * (len+2));
+			id[0]    = '$';
+			for(int j = 0; j < (len+1); j++)	id[j] = text.str[j+i];
+			id[len+1]  = '\0';
+			ret[tkct] = (Token){id, hashStr(id), T_STRVAR}; tkct++;
+			i += len;
+		}else if (c == '#'){
 			// comment
 			break;
+		}else if (c == '%'){
+			int len = 0;
+			for(int j = i+1; j < text.len; j++){
+				char v = text.str[j];
+				if(!isNumber(v)){ j = text.len; len--; }
+				len++;
+			}
+			char* id   = malloc(sizeof(char) * (len+2));
+			id[0]      = '%';
+			uint64_t x = 0;
+			for(int j  = 0; j < (len+1); j++){ id[j] = text.str[j+i]; x = (x * 10) + (text.str[j+i]-'0'); }
+			id[len+1]  = '\0';
+			ret[tkct]  = (Token){id, x, T_PERCENT}; tkct++;
+			i += len;
 		}else if((c != ' ') && (c != '\t')){
 			// more complex symbols
 			if((c == '-') && (i+1 < text.len) && (text.str[i+1] == '>')){
@@ -131,7 +174,7 @@ Token* lineTokens(Str text, int* tksct){
 				int len = 1;
 				for(int j = i+1; j < text.len; j++){
 					char v = text.str[j];
-					if(!isText(v)) j = text.len;
+					if(!isText(v)){ j = text.len; len--; }
 					len++;
 				}
 				char* id = malloc(sizeof(char) * (len+1));
@@ -139,20 +182,6 @@ Token* lineTokens(Str text, int* tksct){
 				id[len]  = '\0';
 				ret[tkct] = (Token){id, hashStr(id), T_WORD}; tkct++;
 				i += len-1;
-			}else if(c == '%'){
-				int len = 0;
-				for(int j = i+1; j < text.len; j++){
-					char v = text.str[j];
-					if(!isNumber(v)) j = text.len;
-					len++;
-				}
-				char* id   = malloc(sizeof(char) * (len+2));
-				id[0]      = '%';
-				uint64_t x = 0;
-				for(int j  = 0; j < (len+1); j++){ id[j] = text.str[j+i]; x = (x * 10) + (text.str[j+i]-'0'); }
-				id[len+1]  = '\0';
-				ret[tkct]  = (Token){id, x, T_PERCENT}; tkct++;
-				i += len;
 			}
 		}
 	}

@@ -3,8 +3,8 @@
 
 # This is a comment line
 
-Hello World!
-  * Goodbye   -> @end
-  * Okay then -> @end
+Hello $name! {_foo 5 3}
+  * Goodbye                -> @end
+  * {%70 Okay | Cool} then -> @end
 
 @end
