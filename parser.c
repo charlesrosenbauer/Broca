@@ -49,3 +49,29 @@ int indentation(Str text){
 	}
 	return ct;
 }
+
+
+
+
+Token* lineTokens(Str text, int* tksct){
+	Token* ret = malloc(sizeof(Token) * text.len);
+	int tkct   = 0;
+	for(int i = 0; i < text.len; i++){
+		char c = text.str[i];
+		if       (c == '{'){
+			ret[tkct] = (Token){NULL, 0, T_OPEN  }; tkct++;
+		}else if (c == '}'){
+			ret[tkct] = (Token){NULL, 0, T_CLOSE }; tkct++;
+		}else if (c == '|'){
+			ret[tkct] = (Token){NULL, 0, T_OR    }; tkct++;
+		}else if (c == '*'){
+			ret[tkct] = (Token){NULL, 0, T_OPTION}; tkct++;
+		}else if (c == '@'){
+			// parse tag
+		}else if((c != ' ') && (c != '\t')){
+			// more complex symbols
+		}
+	}
+	return ret;
+}
+
