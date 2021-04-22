@@ -189,3 +189,34 @@ Token* lineTokens(Str text, int* tksct){
 	return ret;
 }
 
+
+int parseScriptLine(Token** lines, int* tcts, int linect, int offset){
+	for(int i = 0; i < linect; i++){
+		if(tcts[i] > 0){
+			int start = 0;
+			if(lines[i][0].type == T_INDENT){
+				if(lines[i][0].hash < offset) return i;
+				start = 1;
+			}else if(offset > 0) return i;
+			
+			for(int j = start; j < tcts[i]; j++){
+				
+			}
+		}
+	}
+}
+
+
+void parseScript(char* text){
+	int  linect;
+	Str* lines  = getLines(text, &linect);
+	Token** tks = malloc(sizeof(Token*) * linect);
+	int*  tcts  = malloc(sizeof(int)    * linect);
+	
+	for(int i = 0; i < linect; i++){
+		
+	}
+}
+
+
+

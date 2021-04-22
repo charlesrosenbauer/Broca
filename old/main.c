@@ -1,9 +1,10 @@
-#include "stdio.h"
 #include "stdint.h"
+#include "string.h"
 #include "stdlib.h"
+#include "stdio.h"
 
-#include "line.h"
-
+#include "parser.h"
+#include "struct.h"
 
 
 
@@ -27,17 +28,19 @@ void loadFile(char* fname, char** buffer, int* fsize){
   fclose(pFile);
 }
 
-int main(int argc, char** args){
-	char** filePaths = malloc(sizeof(char*) * argc);
-	char** files     = malloc(sizeof(char*) * argc);
-	int*   fsizes    = malloc(sizeof(int)   * argc);
-	int    filect    = argc-1;
-	for(int i = 1; i < argc; i++){
-		filePaths[i-1] = args[i];
-		loadFile(args[i], &files[i-1], &fsizes[i-1]);
-	}
+
+int main(){
+	char* text;
+	int   fsize;
+	loadFile("script.pen", &text, &fsize);
 	
-	Line* lines;
-	int lnct = splitLines(files[0], fsizes[0], 0, &lines);
-	printLines(lines, lnct);
+	int  linect;
+	Str* lines  = getLines(text, &linect);
+	Token** tks = malloc(sizeof(Token*) * linect);
+	int*  tcts  = malloc(sizeof(int)    * linect);
+	
+	for(int i = 0; i < linect; i++){
+		tks[i] = lineTokens(lines[i], &tcts[i]);
+		for(int j = 0; j < tcts[i]; j++) printf("%i | TK: %i, X: %lu, STR: %s\n", i+1, tks[i][j].type, tks[i][j].hash, tks[i][j].word);
+	}
 }
