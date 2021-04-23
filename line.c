@@ -17,17 +17,24 @@ int splitLines(char* text, int fsize, int fileId, Line** lines){
 	Line* ls  = *lines;
 	int  lnix = 0;
 	int  init = 0;
+	int  dark = 0;
 	last = 0;
 	for(int i = 0; i < fsize; i++){
-		if((text[i] == '\n') && (last != text[i])){
+		if((text[i] == '\n') && (last != text[i]) && dark){
 			ls[lnix].text = malloc(sizeof(char) * (1+i-init));
 			for(int j = init; j <= i; j++) ls[lnix].text[j-init] = text[j];
 			ls[lnix].text[i-init] = 0;
 			ls[lnix].fileId = fileId;
 			ls[lnix].line   = lnix;
 			lnix++;
+			init = i+1;
+			dark = 0;
+		}else if (text[i] == '\n'){
 			init = i;
+		}else if((text[i] != ' ') && (text[i] != '\t')){
+			dark = 1;
 		}
+		last = text[i];	
 	}
 	
 	return lnct;
