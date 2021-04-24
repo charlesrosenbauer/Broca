@@ -15,6 +15,7 @@ int splitLines(char* text, int fsize, int fileId, Line** lines){
 	
 	*lines    = malloc(sizeof(Line) * lnct);
 	Line* ls  = *lines;
+	lnct      = 0;
 	int  lnix = 0;
 	int  init = 0;
 	int  dark = 0;
@@ -29,8 +30,9 @@ int splitLines(char* text, int fsize, int fileId, Line** lines){
 			lnix++;
 			init = i+1;
 			dark = 0;
+			lnct++;
 		}else if (text[i] == '\n'){
-			init = i;
+			init = i+1;
 		}else if((text[i] != ' ') && (text[i] != '\t')){
 			dark = 1;
 		}
@@ -45,4 +47,37 @@ void printLines(Line* ls, int lnct){
 	for(int i = 0; i < lnct; i++){
 		printf("L%i: %i@%i | %s\n", i, ls[i].line, ls[i].fileId, ls[i].text);
 	}
+}
+
+
+int  skipWhite(Line* l, int ix){
+	while(1){
+		if( l->text[ix] ==  0 ) return -1;
+		if((l->text[ix] != ' ') && (l->text[ix] != '\t')) return ix;
+		ix++;
+	}
+	return 0;
+}
+
+int parseLine(Line* l){
+	/*
+		*			is option
+		Name:		is name
+		Name(pose):	is name with pose
+		->			is goto
+		@			is location
+		#			is signal
+	*/
+	int ix = 0;
+	ix = skipWhite(l, ix);
+	l->offset = ix;
+	
+	if(l->text[ix] == '*'){
+		// Option
+	}else if(l->text[ix] == '@'){
+		// Location
+	}else{
+		return 0;
+	}
+	return 1;
 }

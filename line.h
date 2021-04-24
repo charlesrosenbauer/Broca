@@ -18,7 +18,7 @@ typedef struct{
 
 int  splitLines(char*, int, int, Line**); 
 void printLines(Line*, int);
-//Line parseLine ();
+int  parseLine (Line*);
 
 
 #endif
