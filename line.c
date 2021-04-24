@@ -44,8 +44,12 @@ int splitLines(char* text, int fsize, int fileId, Line** lines){
 
 
 void printLines(Line* ls, int lnct){
+	char* texts[3];
+	texts[LT_TEXT] = "TEXT";
+	texts[LT_OPTN] = "OPTN";
+	texts[LT_LOCT] = "LOCT";
 	for(int i = 0; i < lnct; i++){
-		printf("L%i: %i@%i | %s\n", i, ls[i].line, ls[i].fileId, ls[i].text);
+		printf("L%i %s: %i:%i@%i | %s\n", i, texts[ls[i].type], ls[i].line, ls[i].offset, ls[i].fileId, ls[i].text);
 	}
 }
 
@@ -74,10 +78,12 @@ int parseLine(Line* l){
 	
 	if(l->text[ix] == '*'){
 		// Option
+		l->type = LT_OPTN;
 	}else if(l->text[ix] == '@'){
 		// Location
+		l->type = LT_LOCT;
 	}else{
-		return 0;
+		l->type = LT_TEXT;
 	}
 	return 1;
 }

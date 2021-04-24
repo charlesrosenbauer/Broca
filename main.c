@@ -39,5 +39,11 @@ int main(int argc, char** args){
 	
 	Line* lines;
 	int lnct = splitLines(files[0], fsizes[0], 0, &lines);
+	for(int i = 0; i < lnct; i++){
+		if(!parseLine(&lines[i])){
+			printf("Error on line %i\n", lines[i].line);
+			return 1;
+		}
+	}
 	printLines(lines, lnct);
 }

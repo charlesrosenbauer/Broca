@@ -9,10 +9,17 @@ typedef struct{
 	// Fill this out
 }Param;
 
+typedef enum{
+	LT_TEXT = 0,
+	LT_OPTN = 1,
+	LT_LOCT = 2
+}LineType;
+
 typedef struct{
-	int    fileId, line, offset, next, parct;
-	char*  text;
-	Param* pars;
+	int      fileId, line, offset, next, parct;
+	char*    text;
+	Param*   pars;
+	LineType type;
 }Line;
 
 
